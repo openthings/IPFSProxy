@@ -11,6 +11,12 @@ Consortium members agree to pin IPFS hashes in their respective IPFS instances
 
 ## Run the tests
 
+start testRPC
+
+``` $ testrpc```
+
+In a seperate window , run the unit tests
+
 ``` $ truffle test ```
 
 

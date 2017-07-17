@@ -1,9 +1,12 @@
 #!/bin/bash
 
 ipfs init
+
 ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"https://ipfs.swarm.city\"]"
 ipfs config --json API.HTTPHeaders.Access-Control-Allow-Credentials "[\"true\"]"
 ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods "[\"PUT\", \"POST\", \"GET\"]"
+ipfs config --json Addresses.API "\"/ip4/0.0.0.0/tcp/5001\""
+ipfs config --json Addresses.Gateway "\"/ip4/0.0.0.0/tcp/8080\""
 
 touch /root/.jsawkrc && npm install -g jsawk
 

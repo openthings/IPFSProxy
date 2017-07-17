@@ -4,12 +4,14 @@ import 'Ownable.sol';
 
 contract IPFSProxy is Ownable {
 	mapping(address=>bool) public membership;
-	mapping(address=>uint) public complaints;
+	mapping(address => mapping( address => bool)) public complained;
+        mapping(address => uint) public complaint;
 	uint banThreshold;
+	
 	/**
 	* @dev Throws if called by any account other than a valid member. 
 	*/
-	modifier onlyValidMembers() {
+	modifier onlyValidMembers {
 		if (membership[msg.sender] != true) {
 		  throw;
 		}
@@ -19,6 +21,7 @@ contract IPFSProxy is Ownable {
 	event HashAdded(address PubKey, string IPFSHash, uint ttl);
 	event HashRemoved(address PubKey, string IPFSHash);
 	event Banned(string IPFSHash);
+	event BanAttempt(address complainer, address _Member, uint complaints );
 
 	/**
 	* @dev Constructor - adds the owner to the list of valid members
@@ -50,11 +53,15 @@ contract IPFSProxy is Ownable {
 	*/
 	function banMember (address _Member, string _evidence) onlyValidMembers {
 		if (!membership[_Member]) {throw;}
-		complaints[_Member] += 1;
-		if (complaints[_Member] >= banThreshold) { 
+                if (complained[msg.sender][_Member]) {throw;}
+		complained[msg.sender][_Member] = true;
+		complaint[_Member] += 1;	
+		if (complaint[_Member] >= banThreshold) { 
 			membership[_Member] = false;
 			MemberRemoved(_Member);
                         Banned(_evidence);
+		} else {
+			BanAttempt(msg.sender, _Member, complaint[_Member]);
 		}
 	}
 

@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ipfs-api": "^14.0.4",
     "zeppelin-solidity": "^1.1.0"
   }
 }

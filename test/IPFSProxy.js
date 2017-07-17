@@ -49,7 +49,7 @@ contract('IPFSProxy', function(accounts) {
       instance.addMember(accounts[1], {
         from: accounts[0]
       }).then(function(res) {
-        assert.fail(null, null, 'this function should throw', e);
+        assert.fail(null, null, 'this function should throw');
         done();
       }).catch(function(e) {
         done();
@@ -63,9 +63,9 @@ contract('IPFSProxy', function(accounts) {
       instance.addHash(testHash, testTTL, {
         from: accounts[1]
       }).then(function(res) {
-        assert.fail(null, null, 'this function should throw', e);
         done();
       }).catch(function(e) {
+        assert.fail(null, null, 'this function should not throw', e);
         done();
       });
     });

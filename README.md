@@ -11,6 +11,10 @@ Consortium members agree to pin IPFS hashes in their respective IPFS instances
 
 ## Run the proxylistener
 
+run a local IPFS node with the API enabled
+
+``` $ ipfs daemon ```
+
 start testRPC
 
 ``` $ testrpc```
@@ -19,17 +23,18 @@ run the contract migrations
 
 ``` $ truffle migrate ```
 
-In another window , run the proxylistener script
+run the proxylistener script
 
 ``` $ truffle exec scripts/proxylistener.js ```
 
-Then add a hash to the contract by calling the addHash function , or just run this script which does exactly that:
+Then add a hash to the contract by calling the addHash function , or just run this script in another window which does exactly that:
 
 ``` $ truffle exec scripts/addhash.js ```
 
 You should see a hash getting pinned, and after the TTL get unpinned.
 
 ```
+
 pinning hash QmTXUwTJtrUPAT3DppvHd5dvzRNzJPqwWQg6iWxvHhMuxX
 pinned... QmTXUwTJtrUPAT3DppvHd5dvzRNzJPqwWQg6iWxvHhMuxX null [ 'QmTXUwTJtrUPAT3DppvHd5dvzRNzJPqwWQg6iWxvHhMuxX' ]
 unpinned... [ 'QmTXUwTJtrUPAT3DppvHd5dvzRNzJPqwWQg6iWxvHhMuxX' ]

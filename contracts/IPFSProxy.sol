@@ -1,10 +1,11 @@
 pragma solidity ^0.4.11;
 
-import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
+import 'Ownable.sol';
 
 contract IPFSProxy is Ownable {
 	mapping(address=>bool) public membership;
-
+	mapping(address=>uint) public complaints;
+	uint banThreshold;
 	/**
 	* @dev Throws if called by any account other than a valid member. 
 	*/
@@ -17,32 +18,45 @@ contract IPFSProxy is Ownable {
 
 	event HashAdded(address PubKey, string IPFSHash, uint ttl);
 	event HashRemoved(address PubKey, string IPFSHash);
-
+	event Banned(string IPFSHash);
 
 	/**
 	* @dev Constructor - adds the owner to the list of valid members
 	*/
 	function IPFSProxy(){
 		addMember(msg.sender);
+		banThreshold = 1;
 	}
 
 	/**
 	* @dev Add hash to persistent storage
-	* @param _IPFHash The ipfs hash to propagate.
-    * @param _ttl amount of time is seconds to persist this. 
+	* @param _IPFSHash The ipfs hash to propagate.
+	* @param _ttl amount of time is seconds to persist this. 
 	*/
-	function addHash(string _IPFHash, uint _ttl) onlyValidMembers{
-		HashAdded(msg.sender,_IPFHash,_ttl);
+	function addHash(string _IPFSHash, uint _ttl) onlyValidMembers{
+		HashAdded(msg.sender,_IPFSHash,_ttl);
 	}
 
 	/**
 	* @dev Remove hash from persistent storage
-	* @param _IPFHash The ipfs hash to propagate.	
+	* @param _IPFSHash The ipfs hash to propagate.	
 	*/
-	function removeHash(string _IPFHash) onlyValidMembers{
-		HashRemoved(msg.sender,_IPFHash);
+	function removeHash(string _IPFSHash) onlyValidMembers{
+		HashRemoved(msg.sender,_IPFSHash);
 	}
 
+	/**
+	*@dev removes a member who exceeds the cap
+	*/
+	function banMember (address _Member, string _evidence) onlyValidMembers {
+		if (!membership[_Member]) {throw;}
+		complaints[_Member] += 1;
+		if (complaints[_Member] >= banThreshold) { 
+			membership[_Member] = false;
+			MemberRemoved(_Member);
+                        Banned(_evidence);
+		}
+	}
 
 	event MemberAdded(address _Address);
 	event MemberRemoved(address _Address);
@@ -62,6 +76,14 @@ contract IPFSProxy is Ownable {
 		membership[_Address] = false;
 		MemberRemoved(_Address);
 	}
+
+	/**
+	* @dev update ban threshold
+	*/
+        function updateBanThreshold (uint _banThreshold) onlyOwner {
+		banThreshold = _banThreshold;
+	}
+
 	/**
 	* @dev check if an address is member of the consortium 
 	* @param _Address address of the pubkey to test.	

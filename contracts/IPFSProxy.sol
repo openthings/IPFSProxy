@@ -5,7 +5,7 @@ import 'Ownable.sol';
 contract IPFSProxy is Ownable {
 	mapping(address=>bool) public membership;
 	mapping(address => mapping( address => bool)) public complained;
-        mapping(address => uint) public complaint;
+	mapping(address => uint) public complaint;
 	uint banThreshold;
 	
 	/**
@@ -53,13 +53,13 @@ contract IPFSProxy is Ownable {
 	*/
 	function banMember (address _Member, string _evidence) onlyValidMembers {
 		if (!membership[_Member]) {throw;}
-                if (complained[msg.sender][_Member]) {throw;}
+		if (complained[msg.sender][_Member]) {throw;}
 		complained[msg.sender][_Member] = true;
 		complaint[_Member] += 1;	
 		if (complaint[_Member] >= banThreshold) { 
 			membership[_Member] = false;
 			MemberRemoved(_Member);
-                        Banned(_evidence);
+			Banned(_evidence);
 		} else {
 			BanAttempt(msg.sender, _Member, complaint[_Member]);
 		}

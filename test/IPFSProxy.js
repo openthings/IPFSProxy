@@ -71,4 +71,32 @@ contract('IPFSProxy', function(accounts) {
     });
   });
 
+  it("ban a cheating user", function(done) {
+    IPFSProxy.deployed().then(function(instance) {
+      instance.banMember(accounts[1], "", {
+        from: accounts[1]
+      }).then(function(res) {
+        done();
+      }).catch(function(e) {
+        assert.fail(null, null, 'this function should not throw', e);
+        done();
+      });
+    });
+  });
+
+  it("change ban threshold", function(done) {
+    IPFSProxy.deployed().then(function(instance) {
+      instance.updateBanThreshold(3, {
+        from: accounts[0]
+      }).then(function(res) {
+        done();
+      }).catch(function(e) {
+        assert.fail(null, null, 'this function should not throw', e);
+        done();
+      });
+    });
+  });
+
+
+
 });

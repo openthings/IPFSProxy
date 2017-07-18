@@ -9,7 +9,16 @@ Consortium members agree to pin IPFS hashes in their respective IPFS instances
 
 ``` $ npm install ```
 
-## Run the proxylistener
+## Run the proxylistener ( on the ropsten testnet - via docker )
+
+```
+$ cd docker 
+$ docker build -t ipfs-proxy .
+$ docker run ipfs-proxy
+```
+
+
+## Run the proxylistener ( on localhost - via truffle )
 
 run a local IPFS node with the API enabled
 
@@ -50,6 +59,14 @@ start testRPC
 In a seperate window , run the unit tests
 
 ``` $ truffle test ```
+
+## Useful links
+
+### IPFS API
+
+https://github.com/ipfs/interface-ipfs-core#api
+
+
 
 
 

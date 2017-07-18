@@ -58,6 +58,8 @@ contract IPFSProxy is Ownable {
 		complaint[_Member] += 1;	
 		if (complaint[_Member] >= banThreshold) { 
 			membership[_Member] = false;
+			delete complained[msg.sender];
+			delete complaint[msg.sender];
 			MemberRemoved(_Member);
 			Banned(_evidence);
 		} else {

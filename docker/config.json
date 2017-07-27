@@ -1,8 +1,8 @@
 {
 	"ipfsapi":"/ip4/127.0.0.1/tcp/5001",
 	"web3host":"https://ethpool.swarm.city/",
-	"contractaddress":"0x9f54B4be2F29cbE994d965840c7384aF1616d0B4",
-	"startblock":4082167,
+	"contractaddress":"0xa0456ca26d68c2e422edd1bd45cdf5ecfc477e44",
+	"startblock":4082254,
 	"abi": [
     {
       "constant": false,
@@ -34,6 +34,19 @@
         {
           "name": "",
           "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "sizeLimit",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
         }
       ],
       "payable": false,

@@ -1,13 +1,13 @@
 pragma solidity ^0.4.11;
 
-import 'Ownable.sol';
+import './Ownable.sol';
 
 contract IPFSProxy is Ownable {
 	mapping(address=>bool) public membership;
 	mapping(address => mapping( address => bool)) public complained;
 	mapping(address => uint) public complaint;
 	uint banThreshold;
-	uint sizeLimit;
+	uint public sizeLimit;
 	
 	/**
 	* @dev Throws if called by any account other than a valid member. 
@@ -91,7 +91,7 @@ contract IPFSProxy is Ownable {
 	/**
 	* @dev update ban threshold
 	*/
-        function updateBanThreshold (uint _banThreshold) onlyOwner {
+    function updateBanThreshold (uint _banThreshold) onlyOwner {
 		banThreshold = _banThreshold;
 	}
 	/**

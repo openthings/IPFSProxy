@@ -1,0 +1,324 @@
+{
+	"ipfsapi":"/ip4/127.0.0.1/tcp/5001",
+	"web3host":"https://ethpool.swarm.city/",
+	"contractaddress":"0x9f54B4be2F29cbE994d965840c7384aF1616d0B4",
+	"startblock":4082167,
+	"abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_Address",
+          "type": "address"
+        }
+      ],
+      "name": "removeMember",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        },
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "complained",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "complaint",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_Member",
+          "type": "address"
+        },
+        {
+          "name": "_evidence",
+          "type": "string"
+        }
+      ],
+      "name": "banMember",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "membership",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_banThreshold",
+          "type": "uint256"
+        }
+      ],
+      "name": "updateBanThreshold",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_Address",
+          "type": "address"
+        }
+      ],
+      "name": "isMember",
+      "outputs": [
+        {
+          "name": "_isMember",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_limit",
+          "type": "uint256"
+        }
+      ],
+      "name": "setTotalPersistLimit",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_IPFSHash",
+          "type": "string"
+        },
+        {
+          "name": "_ttl",
+          "type": "uint256"
+        }
+      ],
+      "name": "addHash",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_Address",
+          "type": "address"
+        }
+      ],
+      "name": "addMember",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "getSizeLimit",
+      "outputs": [
+        {
+          "name": "sizeLimit",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_IPFSHash",
+          "type": "string"
+        }
+      ],
+      "name": "removeHash",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "payable": false,
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "PubKey",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "IPFSHash",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "name": "ttl",
+          "type": "uint256"
+        }
+      ],
+      "name": "HashAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "PubKey",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "IPFSHash",
+          "type": "string"
+        }
+      ],
+      "name": "HashRemoved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "IPFSHash",
+          "type": "string"
+        }
+      ],
+      "name": "Banned",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "complainer",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "_Member",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "complaints",
+          "type": "uint256"
+        }
+      ],
+      "name": "BanAttempt",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "_Address",
+          "type": "address"
+        }
+      ],
+      "name": "MemberAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "_Address",
+          "type": "address"
+        }
+      ],
+      "name": "MemberRemoved",
+      "type": "event"
+    }
+  ]
+}

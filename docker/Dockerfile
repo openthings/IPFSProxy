@@ -10,6 +10,7 @@ RUN npm install ipfs-api
 WORKDIR /
 COPY startup startup
 COPY proxylistener.js proxylistener.js
+COPY config.json config.json
 
 EXPOSE 5001
 EXPOSE 8080

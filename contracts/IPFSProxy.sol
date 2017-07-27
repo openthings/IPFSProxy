@@ -7,6 +7,7 @@ contract IPFSProxy is Ownable {
 	mapping(address => mapping( address => bool)) public complained;
 	mapping(address => uint) public complaint;
 	uint banThreshold;
+	uint sizeLimit;
 	
 	/**
 	* @dev Throws if called by any account other than a valid member. 
@@ -29,6 +30,7 @@ contract IPFSProxy is Ownable {
 	function IPFSProxy(){
 		addMember(msg.sender);
 		banThreshold = 1;
+		sizeLimit = 1000000000; //1 GB
 	}
 
 	/**
@@ -92,7 +94,13 @@ contract IPFSProxy is Ownable {
         function updateBanThreshold (uint _banThreshold) onlyOwner {
 		banThreshold = _banThreshold;
 	}
-
+	/**
+	* @dev set total allowed upload
+	*
+	**/
+	function setTotalPersistLimit (uint _limit) onlyOwner {
+		sizeLimit = _limit;
+	}
 	/**
 	* @dev check if an address is member of the consortium 
 	* @param _Address address of the pubkey to test.	
@@ -100,4 +108,12 @@ contract IPFSProxy is Ownable {
 	function isMember(address _Address) returns (bool _isMember) {
 		return (membership[_Address] == true);
 	}
+
+	/**
+	* @dev returns the current upload Limit
+	*/
+	function getSizeLimit() returns(uint sizeLimit) {
+		return(sizeLimit);
+	}
+
 }

@@ -6,16 +6,14 @@ contract IPFSProxy is Ownable {
 	mapping(address=>bool) public membership;
 	mapping(address => mapping( address => bool)) public complained;
 	mapping(address => uint) public complaint;
-	uint banThreshold;
+	uint public banThreshold;
 	uint public sizeLimit;
 	
 	/**
 	* @dev Throws if called by any account other than a valid member. 
 	*/
 	modifier onlyValidMembers {
-		if (membership[msg.sender] != true) {
-		  throw;
-		}
+		require (membership[msg.sender] == true);
 		_;
 	}
 
@@ -54,8 +52,8 @@ contract IPFSProxy is Ownable {
 	*@dev removes a member who exceeds the cap
 	*/
 	function banMember (address _Member, string _evidence) onlyValidMembers {
-		if (!membership[_Member]) {throw;}
-		if (complained[msg.sender][_Member]) {throw;}
+		require(membership[_Member]);
+		require(!complained[msg.sender][_Member]);
 		complained[msg.sender][_Member] = true;
 		complaint[_Member] += 1;	
 		if (complaint[_Member] >= banThreshold) { 
@@ -91,7 +89,7 @@ contract IPFSProxy is Ownable {
 	/**
 	* @dev update ban threshold
 	*/
-    function updateBanThreshold (uint _banThreshold) onlyOwner {
+	function updateBanThreshold (uint _banThreshold) onlyOwner {
 		banThreshold = _banThreshold;
 	}
 	/**
@@ -108,12 +106,4 @@ contract IPFSProxy is Ownable {
 	function isMember(address _Address) returns (bool _isMember) {
 		return (membership[_Address] == true);
 	}
-
-	/**
-	* @dev returns the current upload Limit
-	*/
-	function getSizeLimit() returns(uint sizeLimit) {
-		return(sizeLimit);
-	}
-
 }

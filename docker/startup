@@ -14,4 +14,6 @@ cat ~/.ipfs/config | jsawk 'return this.Identity'
 
 ipfs daemon &
 
+sleep 5
+
 node proxylistener.js

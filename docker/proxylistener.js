@@ -8,8 +8,7 @@ console.log('config:',config);
 var ipfs = ipfsAPI(config.ipfsapi);
 web3.setProvider(new web3.providers.HttpProvider(config.web3host));
 
-var contractAbi = config.abi;
-var contract = web3.eth.contract(contractAbi).at(config.contractaddress);
+var contract = web3.eth.contract(config.abi).at(config.contractaddress);
 
 
 var startBlock = config.startblock ;

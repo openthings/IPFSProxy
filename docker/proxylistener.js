@@ -5,9 +5,9 @@ var config = require('./config.json');
 var ipfs = ipfsAPI(config.ipfsapi);
 var web3 = new Web3(new Web3.providers.HttpProvider(config.web3host));
 
-var contract = web3.eth.contract(config.abi).at(config.contractaddress);
+var contract = web3.eth.contract(config.IPFSProxyAbi).at(config.contractaddress);
 
-var events = contract.allEvents({
+var ipfsProxyEvents = contract.allEvents({
   fromBlock: config.startblock,
   toBlock: 'latest'
 });
@@ -17,6 +17,7 @@ console.log("Currently at block=" + web3.eth.blockNumber);
 var memberquota = {};
 var hashvalidity = {};
 var epochtohash = {};
+var watchedcontracts = {};
 
 contract.sizeLimit(function(err, res) {
   if (err) {
@@ -25,15 +26,47 @@ contract.sizeLimit(function(err, res) {
   var sizelimit = res.toNumber(10);
   console.log('sizelimit=', sizelimit);
 
-  var listener = events.watch(function(error, result) {
+  var listener = ipfsProxyEvents.watch(function(error, result) {
     if (error == null) {
       switch (result.event) {
+        case 'ContractAdded':
+          console.log('ContractAdded', result.args.PubKey);
+          addContract(result.args.PubKey,result.blockNumber);
+          break;
         case 'MemberAdded':
           console.log('MemberAdded', result.args._Address);
           memberquota[result.args._Address] = {
             totalsize: 0
           };
           break;
+        case 'Banned':
+        case 'BanAttempt':
+          console.log('Event handler not implemented:',result.event);
+          break;
+        default:
+          break;
+      }
+    } else {
+      console.log(error, result);
+    }
+  });
+});
+
+function addContract(contractaddress,startblock){
+  if (watchedcontracts[contractaddress]){
+    console.log('already watching address',contractaddress);
+    return;
+  }
+  var contract = web3.eth.contract(config.IPFSEventsAbi).at(contractaddress);
+  
+  var eventlistener = contract.allEvents({
+    fromBlock: startblock,
+    toBlock: 'latest'
+  });
+
+  var listener = eventlistener.watch(function(error, result) {
+    if (error == null) {
+      switch (result.event) {
         case 'HashAdded':
           web3.eth.getBlock(result.blockNumber, function(error, blockInfo) {
             console.log('block timestamp approx=', blockInfo.timestamp);
@@ -61,19 +94,16 @@ contract.sizeLimit(function(err, res) {
         case 'HashRemoved':
           removehash(result.args.IPFSHash);
           break;
-        case 'Banned':
-        case 'BanAttempt':
-          console.log('Event handler not implemented:',result.event);
-          break;
-        default:
-          console.log('Unknown event', result.event);
-          break;
       }
     } else {
       console.log(error, result);
     }
   });
-});
+
+  watchedcontracts[contractaddress] = listener;
+
+}
+
 
 // clean the hashtaglist every hour.
 setInterval(cleanepoch, 1000 * 60 * 60);

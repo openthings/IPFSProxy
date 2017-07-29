@@ -1,9 +1,50 @@
 {
 	"ipfsapi":"/ip4/127.0.0.1/tcp/5001",
 	"web3host":"https://ethpool.swarm.city/",
-	"contractaddress":"0xa0456ca26d68c2e422edd1bd45cdf5ecfc477e44",
-	"startblock":4082254,
-	"abi": [
+	"contractaddress":"0x7433c7c768be4025ab791fb7b2942c3d9e309f3e",
+	"startblock": 4090116,
+  "IPFSEventsAbi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "PubKey",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "IPFSHash",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "name": "ttl",
+          "type": "uint256"
+        }
+      ],
+      "name": "HashAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "PubKey",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "IPFSHash",
+          "type": "string"
+        }
+      ],
+      "name": "HashRemoved",
+      "type": "event"
+    }
+  ],
+	"IPFSProxyAbi": [
     {
       "constant": false,
       "inputs": [
@@ -89,6 +130,19 @@
     },
     {
       "constant": true,
+      "inputs": [],
+      "name": "banThreshold",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
       "inputs": [
         {
           "name": "",
@@ -153,11 +207,41 @@
       "constant": false,
       "inputs": [
         {
+          "name": "_toWatch",
+          "type": "address"
+        },
+        {
+          "name": "_ttl",
+          "type": "uint256"
+        }
+      ],
+      "name": "addContract",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
           "name": "_limit",
           "type": "uint256"
         }
       ],
       "name": "setTotalPersistLimit",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_contractAddress",
+          "type": "address"
+        }
+      ],
+      "name": "removeContract",
       "outputs": [],
       "payable": false,
       "type": "function"
@@ -189,19 +273,6 @@
       ],
       "name": "addMember",
       "outputs": [],
-      "payable": false,
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [],
-      "name": "getSizeLimit",
-      "outputs": [
-        {
-          "name": "sizeLimit",
-          "type": "uint256"
-        }
-      ],
       "payable": false,
       "type": "function"
     },
@@ -246,16 +317,11 @@
         },
         {
           "indexed": false,
-          "name": "IPFSHash",
-          "type": "string"
-        },
-        {
-          "indexed": false,
           "name": "ttl",
           "type": "uint256"
         }
       ],
-      "name": "HashAdded",
+      "name": "ContractAdded",
       "type": "event"
     },
     {
@@ -265,14 +331,9 @@
           "indexed": false,
           "name": "PubKey",
           "type": "address"
-        },
-        {
-          "indexed": false,
-          "name": "IPFSHash",
-          "type": "string"
         }
       ],
-      "name": "HashRemoved",
+      "name": "ContractRemoved",
       "type": "event"
     },
     {
@@ -331,6 +392,57 @@
         }
       ],
       "name": "MemberRemoved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "Limit",
+          "type": "uint256"
+        }
+      ],
+      "name": "PersistLimitChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "PubKey",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "IPFSHash",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "name": "ttl",
+          "type": "uint256"
+        }
+      ],
+      "name": "HashAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "PubKey",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "name": "IPFSHash",
+          "type": "string"
+        }
+      ],
+      "name": "HashRemoved",
       "type": "event"
     }
   ]

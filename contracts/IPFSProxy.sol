@@ -29,8 +29,9 @@ contract IPFSProxy is Ownable,IPFSEvents {
 	*/
 	function IPFSProxy(){
 		addMember(msg.sender);
-		banThreshold = 1;
-		sizeLimit = 1000000000; //1 GB
+		addContract(this, 0);
+		updateBanThreshold(1);
+		setTotalPersistLimit(1000000000); //1 GB
 	}
 
 	/**
@@ -112,12 +113,16 @@ contract IPFSProxy is Ownable,IPFSEvents {
 	function updateBanThreshold (uint _banThreshold) onlyOwner {
 		banThreshold = _banThreshold;
 	}
+
+
+	event PersistLimitChanged(uint Limit);	
 	/**
 	* @dev set total allowed upload
 	*
 	**/
 	function setTotalPersistLimit (uint _limit) onlyOwner {
 		sizeLimit = _limit;
+		PersistLimitChanged(_limit);
 	}
 	/**
 	* @dev check if an address is member of the consortium 

@@ -37,7 +37,6 @@ contract.sizeLimit(function(err, res) {
         case 'HashAdded':
           web3.eth.getBlock(result.blockNumber, function(error, blockInfo) {
             console.log('block timestamp approx=', blockInfo.timestamp);
-            console.log('TTL=', result.args.ttl);
 
             var remainingTTL = parseInt(result.args.ttl) + blockInfo.timestamp * 1000;
             console.log('remaining TTL', remainingTTL);
@@ -59,6 +58,13 @@ contract.sizeLimit(function(err, res) {
             }
           });
           break;
+        case 'HashRemoved':
+          removehash(result.args.IPFSHash);
+          break;
+        case 'Banned':
+        case 'BanAttempt':
+          console.log('Event handler not implemented:',result.event);
+          break;
         default:
           console.log('Unknown event', result.event);
           break;
@@ -70,7 +76,7 @@ contract.sizeLimit(function(err, res) {
 });
 
 // clean the hashtaglist every hour.
-setInterval(cleanepoch,1000 * 60 * 60);
+setInterval(cleanepoch, 1000 * 60 * 60);
 
 function addexpiration(ipfshash, expiretimestamp) {
   var epoch = timestamptoepoch(expiretimestamp);
@@ -97,27 +103,34 @@ function addexpiration(ipfshash, expiretimestamp) {
 function cleanepoch() {
   var now = Date.now();
   var currentEpoch = timestamptoepoch(now);
-  console.log('current epoch is',currentEpoch);
+  console.log('current epoch is', currentEpoch);
   if (epochtohash[currentEpoch]) {
     for (var hash in epochtohash[currentEpoch]) {
       if (epochtohash[currentEpoch].hasOwnProperty(hash)) {
-          console.log('in epoch:',hash);
+        console.log('in epoch:', hash);
         if (hashvalidity[hash] && hashvalidity[hash] < now) {
-          ipfs.pin.rm(hash, function(err, res) {
-            if (err && err.code === 0) {
-              console.log('already unpinned');
-            } else {
-              console.log('unpinned...', res);
-            }
-          });
-          console.log('removing',hash);
-          delete epochtohash[currentEpoch][hash];
-          delete hashvalidity[hash];
-          dumpdata();
+          removehash(hash);
         }
       }
     }
   }
+}
+
+function removehash(ipfshash) {
+  if (!hashvalidity[hash]) return;
+  console.log('removing', hash);
+  var myEpoch = timestamptoepoch(hashvalidity[hash]);
+  ipfs.pin.rm(ipfshash, function(err, res) {
+    if (err && err.code === 0) {
+      console.log('already unpinned');
+    } else {
+      console.log('unpinned...', res);
+    }
+  });
+  if (epochtohash[myEpoch]){
+    delete epochtohash[myEpoch][hash];
+  }
+  delete hashvalidity[hash];
 }
 
 function timestamptoepoch(timestamp) {

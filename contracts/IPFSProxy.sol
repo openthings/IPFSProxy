@@ -18,7 +18,9 @@ contract IPFSProxy is Ownable {
 	}
 
 	event HashAdded(address PubKey, string IPFSHash, uint ttl);
+        event ContractAdded(address PubKey, uint ttl);
 	event HashRemoved(address PubKey, string IPFSHash);
+        event ContractRemoved(address PubKey);
 	event Banned(string IPFSHash);
 	event BanAttempt(address complainer, address _Member, uint complaints );
 
@@ -46,6 +48,24 @@ contract IPFSProxy is Ownable {
 	*/
 	function removeHash(string _IPFSHash) onlyValidMembers{
 		HashRemoved(msg.sender,_IPFSHash);
+	}
+
+
+	/** 
+	* Add a contract to watch list. Each node will then 
+	* watch it for `HashAdded(msg.sender,_IPFSHash,_ttl);` 
+	* events and it will cache these events
+	*/
+
+	function addContract(address _toWatch, uint _ttl) onlyValidMembers {
+		ContractAdded(_toWatch, _ttl);
+	}
+
+	/**
+	* @dev Remove contract from watch list
+	*/
+	function removeContract(address _contractAddress) onlyValidMembers{
+		ContractRemoved(_contractAddress);
 	}
 
 	/**

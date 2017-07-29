@@ -1,8 +1,9 @@
 pragma solidity ^0.4.11;
 
 import './Ownable.sol';
+import './IPFSEvents.sol';
 
-contract IPFSProxy is Ownable {
+contract IPFSProxy is Ownable,IPFSEvents {
 	mapping(address=>bool) public membership;
 	mapping(address => mapping( address => bool)) public complained;
 	mapping(address => uint) public complaint;
@@ -17,10 +18,9 @@ contract IPFSProxy is Ownable {
 		_;
 	}
 
-	event HashAdded(address PubKey, string IPFSHash, uint ttl);
-        event ContractAdded(address PubKey, uint ttl);
-	event HashRemoved(address PubKey, string IPFSHash);
-        event ContractRemoved(address PubKey);
+	
+    event ContractAdded(address PubKey, uint ttl);
+    event ContractRemoved(address PubKey);
 	event Banned(string IPFSHash);
 	event BanAttempt(address complainer, address _Member, uint complaints );
 

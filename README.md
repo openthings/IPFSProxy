@@ -5,17 +5,35 @@
 A smart contract that emits events from a list of consortium members to add and remove persistent IPFS hashes.
 Consortium members agree to pin IPFS hashes in their respective IPFS instances
 
-## Install requirements
+## Running the proxylistener
 
-``` $ npm install ```
+Run an IPFS node on your machine, then run these commands:
 
-## Run the proxylistener ( on the livenet - via docker )
+```
+$ cd docker
+$ npm install
+$ node proxylistener.js
+
+```
+
+## Running in a docker container
 
 ```
 $ cd docker 
 $ docker build -t ipfs-proxy .
 $ docker run ipfs-proxy
 ```
+
+## Useful scripts
+
+Deploy the contract via truffle
+
+``` $truffle exec ./scripts/deploy_ipfsproxy.js ```
+
+Add a hash to the contract ( fill in the contractaddress and IPFS hash first )
+
+``` $truffle exec ./scripts/addhash.js ```
+
 
 ## Run the tests
 

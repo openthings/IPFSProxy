@@ -5,7 +5,9 @@
 A smart contract that emits events from a list of consortium members to add and remove persistent IPFS hashes.
 Consortium members agree to pin IPFS hashes in their respective IPFS instances
 
-## Running the proxylistener
+## As a consortium member or supporting node
+
+### Running the proxylistener
 
 Run an IPFS node on your machine, then run these commands:
 
@@ -16,13 +18,42 @@ $ node proxylistener.js
 
 ```
 
-## Running in a docker container
+### Running in a docker container
 
 ```
 $ cd docker 
 $ docker build -t ipfs-proxy .
 $ docker run ipfs-proxy
 ```
+
+## As a user of the IPFS consortium 
+
+### Use it in your contract
+
+Register your contract address in the IPFSProxy contract using the ```addContract``` function.
+
+Inherit the IPFSEvents contract in your own
+
+```
+contract MyContract is IPFSEvents {
+	...
+	function myFunctionThatAddsAHash(){
+		// add a hash to the IPFS consortium
+		HashAdded(this,_IPFSHash,_ttl);
+	}
+
+	function myFunctionThatRemovesAHash(){
+		HashRemoved(this,_IPFSHash);
+	}
+}
+```
+
+### Use it from any script using a regular ethereum account
+
+call the function ```addHash``` and ```removeHash``` from the IPFSproxy contract directly
+
+Ofcourse both functions only work when you / your contract is a member of the consortium.
+
 
 ## Useful scripts
 

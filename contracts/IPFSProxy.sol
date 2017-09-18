@@ -31,7 +31,7 @@ contract IPFSProxy is Ownable,IPFSEvents {
 		addMember(msg.sender);
 		addContract(this, 0);
 		updateBanThreshold(1);
-		setTotalPersistLimit(1000000000); //1 GB
+		setTotalPersistLimit(10000000000); //10 GB
 	}
 
 	/**

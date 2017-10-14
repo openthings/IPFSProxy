@@ -1,9 +1,10 @@
 pragma solidity ^0.4.11;
 
-import './Ownable.sol';
-import './IPFSEvents.sol';
+import "./Ownable.sol";
+import "./IPFSEvents.sol";
+import "./Shareable.sol";
 
-contract IPFSProxy is Ownable,IPFSEvents {
+contract IPFSProxy is Ownable,IPFSEvents,Shareable {
 	mapping(address=>bool) public membership;
 	mapping(address => mapping( address => bool)) public complained;
 	mapping(address => uint) public complaint;
@@ -27,11 +28,21 @@ contract IPFSProxy is Ownable,IPFSEvents {
 	/**
 	* @dev Constructor - adds the owner to the list of valid members
 	*/
-	function IPFSProxy(){
-		addMember(msg.sender);
-		addContract(this, 0);
-		updateBanThreshold(1);
-		setTotalPersistLimit(10000000000); //10 GB
+	function IPFSProxy(address[] _owners, uint256 _required) Shareable(_owners, _required) {
+		/*
+			addMember(msg.sender);
+			addContract(this, 0);
+			updateBanThreshold(1);
+			setTotalPersistLimit(10000000000); //10 GB
+		*/
+
+		//Avoid multisig of constructor calls 
+		membership[msg.sender] = true;
+		banThreshold = 1;
+		sizeLimit = 10000000000;
+		PersistLimitChanged(sizeLimit);
+		MemberAdded(msg.sender);
+
 	}
 
 	/**
@@ -39,7 +50,7 @@ contract IPFSProxy is Ownable,IPFSEvents {
 	* @param _IPFSHash The ipfs hash to propagate.
 	* @param _ttl amount of time is seconds to persist this. 
 	*/
-	function addHash(string _IPFSHash, uint _ttl) onlyValidMembers{
+	function addHash(string _IPFSHash, uint _ttl) onlyValidMembers {
 		HashAdded(msg.sender,_IPFSHash,_ttl);
 	}
 
@@ -47,7 +58,7 @@ contract IPFSProxy is Ownable,IPFSEvents {
 	* @dev Remove hash from persistent storage
 	* @param _IPFSHash The ipfs hash to propagate.	
 	*/
-	function removeHash(string _IPFSHash) onlyValidMembers{
+	function removeHash(string _IPFSHash) onlyValidMembers {
 		HashRemoved(msg.sender,_IPFSHash);
 	}
 
@@ -65,14 +76,14 @@ contract IPFSProxy is Ownable,IPFSEvents {
 	/**
 	* @dev Remove contract from watch list
 	*/
-	function removeContract(address _contractAddress) onlyValidMembers{
+	function removeContract(address _contractAddress) onlyValidMembers {
 		ContractRemoved(_contractAddress);
 	}
 
 	/**
 	*@dev removes a member who exceeds the cap
 	*/
-	function banMember (address _Member, string _evidence) onlyValidMembers {
+	function banMember (address _Member, string _evidence) onlymanyowners(keccak256(_Address)) {
 		require(membership[_Member]);
 		require(!complained[msg.sender][_Member]);
 		complained[msg.sender][_Member] = true;
@@ -93,7 +104,7 @@ contract IPFSProxy is Ownable,IPFSEvents {
 	* @dev allows Address to add/remove hashes 
 	* @param _Address address of the pubkey to whitelist.	
 	*/
-	function addMember(address _Address) onlyOwner {
+	function addMember(address _Address) onlymanyowners(keccak256(_Address)) {
 		membership[_Address] = true;
 		MemberAdded(_Address);
 	}
@@ -101,7 +112,7 @@ contract IPFSProxy is Ownable,IPFSEvents {
 	/**
 	* @dev remove allowance from Address to add/remove hashes 
 	*/
-	function removeMember(address _Address) onlyOwner {
+	function removeMember(address _Address) onlymanyowners(keccak256(_Address)) {
 		membership[_Address] = false;
 		delete complaint[_Address];
 		MemberRemoved(_Address);
@@ -110,7 +121,7 @@ contract IPFSProxy is Ownable,IPFSEvents {
 	/**
 	* @dev update ban threshold
 	*/
-	function updateBanThreshold (uint _banThreshold) onlyOwner {
+	function updateBanThreshold (uint _banThreshold) onlymanyowners(keccak256(_banThreshold,msg.sender)) {
 		banThreshold = _banThreshold;
 	}
 
@@ -120,7 +131,7 @@ contract IPFSProxy is Ownable,IPFSEvents {
 	* @dev set total allowed upload
 	*
 	**/
-	function setTotalPersistLimit (uint _limit) onlyOwner {
+	function setTotalPersistLimit (uint _limit) onlymanyowners(keccak256(_limit,msg.sender)) {
 		sizeLimit = _limit;
 		PersistLimitChanged(_limit);
 	}

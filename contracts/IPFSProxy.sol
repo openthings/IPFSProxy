@@ -88,7 +88,7 @@ contract IPFSProxy is IPFSEvents, Multimember {
 	/**
 	* @dev update ban threshold
 	*/
-	function updateBanThreshold (uint _banThreshold) public onlymanymembers(keccak256(_banThreshold,msg.sender)) {
+	function updateBanThreshold (uint _banThreshold) public onlymanymembers(keccak256(_banThreshold)) {
 		banThreshold = _banThreshold;
 	}
 
@@ -96,7 +96,7 @@ contract IPFSProxy is IPFSEvents, Multimember {
 	* @dev set total allowed upload
 	*
 	**/
-	function setTotalPersistLimit (uint _limit) public onlymanymembers(keccak256(_limit,msg.sender)) {
+	function setTotalPersistLimit (uint _limit) public onlymanymembers(keccak256(_limit)) {
 		sizeLimit = _limit;
 		PersistLimitChanged(_limit);
 	}

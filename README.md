@@ -5,6 +5,7 @@
 A smart contract that emits events from a list of consortium members to add and remove persistent IPFS hashes.
 Consortium members agree to pin IPFS hashes in their respective IPFS instances
 
+
 ## As a consortium member or supporting node
 
 ### Running the proxylistener
